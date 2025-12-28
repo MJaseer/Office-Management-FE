@@ -1,0 +1,118 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold">Employees</h1>
+      <p-button label="Add Employee" icon="pi pi-user-plus" [routerLink]="['/employees/new']" />
+    </div>
+
+    <p-card>
+      <ng-template pTemplate="content">
+        <div class="mb-4 flex flex-col md:flex-row gap-4">
+          <div class="w-full md:w-auto">
+            <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Filter by Company</label>
+            <p-dropdown id="company" [options]="companies" optionLabel="name" optionValue="_id" [showClear]="true"
+              placeholder="All Companies" (onChange)="filterByCompany($event.value)" styleClass="w-full md:w-[250px]" />
+          </div>
+          <div class="w-full md:w-auto">
+            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Filter by Role</label>
+            <p-dropdown id="role" [options]="roles" [showClear]="true" placeholder="All Roles"
+              (onChange)="filterByRole($event.value)" styleClass="w-full md:w-[200px]" />
+          </div>
+        </div>
+
+        @if(loading){
+        <div class="text-center py-8">
+          <i class="pi pi-spin pi-spinner text-4xl"></i>
+          <p class="mt-2">Loading employees...</p>
+        </div>
+        }
+
+        @if(error){
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+          {{ error }}
+          <button (click)="loadEmployees()" class="ml-2 text-red-700 hover:text-red-900 underline">
+            Try Again
+          </button>
+        </div>
+        }
+        @if(!loading && !error){
+        <p-table [value]="filteredEmployees" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]"
+          [totalRecords]="filteredEmployees.length" [loading]="loading"
+          [globalFilterFields]="['firstName', 'lastName', 'email', 'company.name']" styleClass="p-datatable-striped"
+          [tableStyle]="{ 'min-width': '60rem' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="firstName">Name <p-sortIcon field="firstName" /></th>
+              <th>Company</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-employee>
+            <tr>
+              <td class="font-semibold cursor-pointer" tabindex="0" [routerLink]="['/employees', employee._id]">{{ employee.firstName }} {{ employee.lastName }}</td>
+              <td>
+                <a [routerLink]="['/companies', employee.company._id]" class="text-blue-600 hover:underline">
+                  {{ employee.company.name }}
+                </a>
+              </td>
+              <td>
+                <a [href]="'mailto:' + employee.email" class="text-blue-600 hover:underline">
+                  {{ employee.email }}
+                </a>
+              </td>
+              <td>
+                <a [href]="'tel:' + employee.phone" class="text-blue-600 hover:underline">
+                  {{ employee.phone }}
+                </a>
+              </td>
+              <td>
+                <p-tag [value]="employee.role" [severity]="getRoleSeverity(employee.role)" />
+              </td>
+              <td>{{ formatDate(employee.createdAt) }}</td>
+              <td>
+                <div class="flex space-x-2">
+                  <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
+                    [routerLink]="['/employees', employee._id]" tooltip="View Details" />
+                  <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+                    [routerLink]="['/employees', employee._id, 'edit']" tooltip="Edit" />
+                  <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                    (click)="confirmDelete(employee)" tooltip="Delete" />
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="text-center py-8">
+                <i class="pi pi-users text-4xl text-gray-300 mb-2"></i>
+                <p class="text-gray-500">No employees found</p>
+                <p-button label="Add First Employee" [routerLink]="['/employees/new']" class="mt-4" />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        }
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600">{{ filteredEmployees.length }} employees found</span>
+          <div class="flex space-x-2">
+            <p-button label="Refresh" icon="pi pi-refresh" (click)="loadEmployees()" [outlined]="true" />
+            <p-button label="Clear Filters" icon="pi pi-filter-slash" (click)="clearFilters()" [outlined]="true"
+              [disabled]="!selectedCompany && !selectedRole" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

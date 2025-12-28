@@ -1,0 +1,124 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="container mx-auto px-4 py-8">
+  @if(loading){
+  <div class="text-center py-8">
+    <i class="pi pi-spin pi-spinner text-4xl"></i>
+    <p class="mt-2">Loading employee details...</p>
+  </div>
+  }
+  @if(error){
+  <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+    {{ error }}
+    <!-- <button (click)="loadEmployee()" class="ml-2 text-red-700 hover:text-red-900 underline">
+          Try Again
+        </button> -->
+  </div>
+  }
+  @if(!loading && !error && employee){
+  <div>
+    <div class="mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold">{{ employee.firstName }} {{ employee.lastName }}</h1>
+        <div class="flex space-x-2">
+          <p-button label="Edit" icon="pi pi-pencil" [routerLink]="['/employees', employee._id, 'edit']"
+            severity="warn" />
+          <p-button label="Delete" icon="pi pi-trash" (click)="confirmDelete()" severity="danger" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <p-card header="Personal Information">
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Name</h3>
+              <p class="mt-1">{{ employee.firstName }} {{ employee.lastName }}</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Role</h3>
+              <div class="mt-1">
+                <p-tag [value]="employee.role" [severity]="getRoleSeverity(employee.role)" />
+              </div>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Email</h3>
+              <a [href]="'mailto:' + employee.email" class="mt-1 text-blue-600 hover:underline block">
+                {{ employee.email }}
+              </a>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Phone</h3>
+              <a [href]="'tel:' + employee.phone" class="mt-1 text-blue-600 hover:underline block">
+                {{ employee.phone }}
+              </a>
+            </div>
+          </div>
+        </p-card>
+
+        <p-card header="Company Information">
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Company</h3>
+              <a [routerLink]="['/companies', employee.company._id]"
+                class="mt-1 text-blue-600 hover:underline block font-semibold">
+                {{ employee.company.name }}
+              </a>
+            </div>
+            @if(employee.company.email){
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Company Email</h3>
+              <a [href]="'mailto:' + employee.company.email" class="mt-1 text-blue-600 hover:underline block">
+                {{ employee.company.email }}
+              </a>
+            </div>
+            }
+            @if(employee.company.phone){
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Company Phone</h3>
+              <a [href]="'tel:' + employee.company.phone" class="mt-1 text-blue-600 hover:underline block">
+                {{ employee.company.phone }}
+              </a>
+            </div>
+            }
+            @if(employee.company.address){
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Company Address</h3>
+              <p class="mt-1">{{ employee.company.address }}</p>
+            </div>
+            }
+          </div>
+        </p-card>
+
+        <p-card header="Employment Details">
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Employee ID</h3>
+              <p class="mt-1 font-mono text-sm">{{ employee._id }}</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Date Joined</h3>
+              <p class="mt-1">{{ formatDate(employee.createdAt) }}</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Last Updated</h3>
+              <p class="mt-1">{{ formatDate(employee.updatedAt) }}</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Status</h3>
+              <div class="mt-1">
+                <p-tag value="Active" severity="success" />
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <div class="flex justify-end space-x-4">
+        <p-button label="Back to Employees" icon="pi pi-arrow-left" [routerLink]="['/employees']" [outlined]="true" />
+        <p-button label="Edit Profile" icon="pi pi-pencil" [routerLink]="['/employees', employee._id, 'edit']" />
+      </div>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,107 @@
+<div class="container mx-auto px-4 py-8">
+  <p-toast />
+  <p-confirmDialog />
+
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold">Companies</h1>
+      <p-button label="Add Company" icon="pi pi-plus" [routerLink]="['/companies/new']" />
+    </div>
+
+    <p-card>
+      <ng-template pTemplate="content">
+        @if(loading){
+        <div class="text-center py-8">
+          <i class="pi pi-spin pi-spinner text-4xl"></i>
+          <p class="mt-2">Loading companies...</p>
+        </div>
+        }
+
+        @if(error){
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+          {{ error }}
+          <button (click)="loadCompanies()" class="ml-2 text-red-700 hover:text-red-900 underline">
+            Try Again
+          </button>
+        </div>
+        }
+
+        @if(!loading && !error){
+        <p-table [value]="companies" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]"
+          [totalRecords]="companies.length" [loading]="loading" [globalFilterFields]="['name', 'email', 'phone']"
+          styleClass="p-datatable-striped" [tableStyle]="{ 'min-width': '60rem' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+              <th>Address</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-company>
+            <tr>
+              <td tabindex="0" class="font-semibold  cursor-pointer" [routerLink]="['/companies', company._id]">{{
+                company.name }}</td>
+              <td>{{ company.address || '-' }}</td>
+              <td>
+                @if(company.email){
+                <a [href]="'mailto:' + company.email" class="text-blue-600 hover:underline">
+                  {{ company.email }}
+                </a>
+                }
+                @if(!company.email){
+                <span>-</span>
+                }
+              </td>
+              <td>
+                @if(company.phone){
+                <a [href]="'tel:' + company.phone" class="text-blue-600 hover:underline">
+                  {{ company.phone }}
+                </a>
+                }
+                @if(!company.phone){
+                <span>-</span>
+                }
+              </td>
+              <td>{{ formatDate(company.createdAt) }}</td>
+              <td>
+                <div class="flex space-x-2">
+                  <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
+                    [routerLink]="['/companies', company._id]" tooltip="View Details" />
+                  <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+                    [routerLink]="['/companies', company._id, 'edit']" tooltip="Edit" />
+                  <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                    (click)="confirmDelete(company)" tooltip="Delete" />
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center py-8">
+                <i class="pi pi-building text-4xl text-gray-300 mb-2"></i>
+                <p class="text-gray-500">No companies found</p>
+                <p-button label="Add First Company" [routerLink]="['/companies/new']" class="mt-4" />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        }
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600">{{ companies.length }} companies found</span>
+          <div class="flex space-x-2">
+            <p-button label="Refresh" icon="pi pi-refresh" (click)="loadCompanies()" [outlined]="true" />
+            <p-button label="Export" icon="pi pi-download" (click)="exportToCSV()" [outlined]="true" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

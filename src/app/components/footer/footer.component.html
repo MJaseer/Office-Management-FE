@@ -1,0 +1,10 @@
+<footer class="bg-zinc-900 border-t py-4">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+        <p>Office Management System &copy; {{ currentYear }}</p>
+        <div class="mt-2 flex justify-center items-center space-x-2">
+            <div class="w-2 h-2 rounded-full" [ngClass]="{'bg-green-500': isConnected, 'bg-red-500': !isConnected}">
+            </div>
+            <span class="text-sm">{{ isConnected ? 'Real-time connected' : 'Real-time disconnected' }}</span>
+        </div>
+    </div>
+</footer>

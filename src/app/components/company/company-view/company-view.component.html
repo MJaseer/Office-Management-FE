@@ -1,0 +1,166 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="container mx-auto px-4 py-8">
+  @if(loading){
+  <div class="text-center py-8">
+    <i class="pi pi-spin pi-spinner text-4xl"></i>
+    <p class="mt-2">Loading company details...</p>
+  </div>
+  }
+
+  @if(error){
+  <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+    {{ error }}
+    <button (click)="loadData()" class="ml-2 text-red-700 hover:text-red-900 underline">
+      Try Again
+    </button>
+  </div>
+  }
+  @if(!loading && !error && company){
+  <div>
+    <div class="mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold">{{ company.name }}</h1>
+        <div class="flex space-x-2">
+          <p-button label="Edit" icon="pi pi-pencil" [routerLink]="['/companies', company._id, 'edit']"
+            severity="warn" />
+          <p-button label="Delete" icon="pi pi-trash" (click)="confirmDelete()" severity="danger" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <p-card>
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Contact Information</h3>
+              <div class="mt-2 space-y-2">
+                @if(company.email){
+                <div class="flex items-center">
+                  <i class="pi pi-envelope mr-2 text-gray-400"></i>
+                  <a [href]="'mailto:' + company.email" class="text-blue-600 hover:underline">
+                    {{ company.email }}
+                  </a>
+                </div>
+                }
+                @if(company.phone){
+                <div class="flex items-center">
+                  <i class="pi pi-phone mr-2 text-gray-400"></i>
+                  <a [href]="'tel:' + company.phone" class="text-blue-600 hover:underline">
+                    {{ company.phone }}
+                  </a>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <p-card>
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Address</h3>
+              @if(company.address){
+              <p class="mt-2">{{ company.address }}</p>
+              }
+              @if(!company.address){
+              <p class="mt-2 text-gray-400">No address provided</p>
+              }
+            </div>
+          </div>
+        </p-card>
+
+        <p-card>
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm font-medium text-gray-500">Statistics</h3>
+              <div class="mt-2 space-y-2">
+                <div class="flex justify-between">
+                  <span>Total Employees</span>
+                  <span class="font-bold">{{ employees.length }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Created</span>
+                  <span>{{ formatDate(company.createdAt) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Last Updated</span>
+                  <span>{{ formatDate(company.updatedAt) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <p-card header="Employees">
+        <ng-template pTemplate="content">
+          @if(employeesLoading){
+          <div class="text-center py-4">
+            <i class="pi pi-spin pi-spinner"></i>
+            <p class="mt-2">Loading employees...</p>
+          </div>
+          }
+          @if(!employeesLoading){
+          <p-table [value]="employees" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
+            [tableStyle]="{ 'min-width': '60rem' }">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-employee>
+              <tr>
+                <td class="font-semibold">{{ employee.firstName }} {{ employee.lastName }}</td>
+                <td>
+                  <a [href]="'mailto:' + employee.email" class="text-blue-600 hover:underline">
+                    {{ employee.email }}
+                  </a>
+                </td>
+                <td>
+                  <a [href]="'tel:' + employee.phone" class="text-blue-600 hover:underline">
+                    {{ employee.phone }}
+                  </a>
+                </td>
+                <td>
+                  <p-tag [value]="employee.role" [severity]="getRoleSeverity(employee.role)" />
+                </td>
+                <td>
+                  <div class="flex space-x-2">
+                    <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
+                      [routerLink]="['/employees', employee._id]" />
+                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+                      [routerLink]="['/employees', employee._id, 'edit']" />
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5" class="text-center py-8">
+                  <i class="pi pi-users text-4xl text-gray-300 mb-2"></i>
+                  <p class="text-gray-500">No employees found</p>
+                  <p-button label="Add Employee" [routerLink]="['/employees/new']"
+                    [queryParams]="{company: company._id}" class="mt-4" />
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          }
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <p-button label="Add Employee" icon="pi pi-user-plus" [routerLink]="['/employees/new']"
+            [queryParams]="{company: company._id}" />
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+  }
+</div>

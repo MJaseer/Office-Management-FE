@@ -1,0 +1,96 @@
+<p-toast />
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <p-card [header]="isEditMode ? 'Edit Employee' : 'Add New Employee'">
+    <ng-template pTemplate="content">
+      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">
+              First Name *
+            </label>
+            <input id="firstName" type="text" pInputText formControlName="firstName" class="w-full"
+              [ngClass]="{'p-invalid': employeeForm.get('firstName')?.invalid && employeeForm.get('firstName')?.touched}" />
+            @if(employeeForm.get('firstName')?.invalid && employeeForm.get('firstName')?.touched){
+            <small class="p-error">
+              First name is required
+            </small>
+            }
+          </div>
+
+          <div>
+            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">
+              Last Name *
+            </label>
+            <input id="lastName" type="text" pInputText formControlName="lastName" class="w-full"
+              [ngClass]="{'p-invalid': employeeForm.get('lastName')?.invalid && employeeForm.get('lastName')?.touched}" />
+            @if(employeeForm.get('lastName')?.invalid && employeeForm.get('lastName')?.touched){
+            <small class="p-error">
+              Last name is required
+            </small>
+            }
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              Email *
+            </label>
+            <input id="email" type="email" pInputText formControlName="email" class="w-full"
+              [ngClass]="{'p-invalid': employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched}" />
+            @if(employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched){
+            <small class="p-error">
+              Please enter a valid email
+            </small>
+            }
+          </div>
+
+          <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+              Phone *
+            </label>
+            <input id="phone" type="tel" pInputText formControlName="phone" class="w-full"
+              [ngClass]="{'p-invalid': employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched}" />
+            @if(employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched) {
+            <small class="p-error">
+              Phone number is required
+            </small>
+            }
+          </div>
+
+          <div>
+            <label for="company" class="block text-sm font-medium text-gray-700 mb-2">
+              Company *
+            </label>
+            <p-dropdown id="company" [options]="companies" optionLabel="name" optionValue="_id"
+              formControlName="company" placeholder="Select Company" [showClear]="!isEditMode" class="w-full"
+              [ngClass]="{'p-invalid': employeeForm.get('company')?.invalid && employeeForm.get('company')?.touched}" />
+            @if(employeeForm.get('company')?.invalid && employeeForm.get('company')?.touched){
+            <small class="p-error">
+              Company is required
+            </small>
+            }
+          </div>
+
+          <div>
+            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
+              Role *
+            </label>
+            <p-dropdown id="role" [options]="roles" formControlName="role" placeholder="Select Role" class="w-full"
+              [ngClass]="{'p-invalid': employeeForm.get('role')?.invalid && employeeForm.get('role')?.touched}" />
+            @if(employeeForm.get('role')?.invalid && employeeForm.get('role')?.touched){
+            <small class="p-error">
+              Role is required
+            </small>
+            }
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-4 pt-6 border-t">
+          <p-button label="Cancel" severity="secondary" [routerLink]="['/employees']" [outlined]="true" />
+          <p-button type="submit" [label]="isEditMode ? 'Update Employee' : 'Create Employee'" [loading]="loading"
+            [disabled]="employeeForm.invalid || loading" />
+        </div>
+      </form>
+    </ng-template>
+  </p-card>
+</div>
