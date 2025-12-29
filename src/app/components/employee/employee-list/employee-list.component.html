@@ -13,12 +13,12 @@
         <div class="mb-4 flex flex-col md:flex-row gap-4">
           <div class="w-full md:w-auto">
             <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Filter by Company</label>
-            <p-dropdown id="company" [options]="companies" optionLabel="name" optionValue="_id" [showClear]="true"
+            <p-select id="company" [options]="companies" optionLabel="name" optionValue="_id" [showClear]="true"
               placeholder="All Companies" (onChange)="filterByCompany($event.value)" styleClass="w-full md:w-[250px]" />
           </div>
           <div class="w-full md:w-auto">
             <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Filter by Role</label>
-            <p-dropdown id="role" [options]="roles" [showClear]="true" placeholder="All Roles"
+            <p-select id="role" [options]="roles" [showClear]="true" placeholder="All Roles"
               (onChange)="filterByRole($event.value)" styleClass="w-full md:w-[200px]" />
           </div>
         </div>

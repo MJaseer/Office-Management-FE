@@ -6,12 +6,12 @@ import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import { EmployeeService } from '../../../services/employee.service';
 import { CompanyService } from '../../../services/company.service';
 import { CreateEmployeeDto, EmployeeRole, UpdateEmployeeDto } from '../../../models/employee.model';
 import { CompanyDropdown } from '../../../models/company.model';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-employee-create',
@@ -23,8 +23,8 @@ import { CompanyDropdown } from '../../../models/company.model';
     CardModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
-    ToastModule
+    ToastModule,
+    SelectModule
   ],
   providers: [MessageService],
   templateUrl: './employee-create.component.html',

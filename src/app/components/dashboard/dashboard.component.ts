@@ -87,6 +87,11 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshData() {
+    this.roleCounts = {
+      [EmployeeRole.MANAGER]: 0,
+      [EmployeeRole.ADMIN]: 0,
+      [EmployeeRole.DEVELOPER]: 0,
+    };
     this.loadData();
     this.companyService.loadCompanies();
     this.employeeService.loadEmployees();

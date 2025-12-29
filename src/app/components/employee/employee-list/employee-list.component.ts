@@ -9,12 +9,12 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TagModule } from 'primeng/tag';
-import { DropdownModule } from 'primeng/dropdown';
 import { EmployeeService } from '../../../services/employee.service';
 import { CompanyService } from '../../../services/company.service';
 import { Employee, EmployeeRole } from '../../../models/employee.model';
 import { CompanyDropdown } from '../../../models/company.model';
 import { Subscription } from 'rxjs';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-employee-list',
@@ -29,7 +29,7 @@ import { Subscription } from 'rxjs';
     ConfirmDialogModule,
     ToastModule,
     TagModule,
-    DropdownModule
+    SelectModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './employee-list.component.html',
