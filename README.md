@@ -40,11 +40,11 @@ src/app/
 ```
 
 ## Features
-- ✅ Real-time company & employee management
-- ✅ Instant updates across browser tabs
-- ✅ Modern UI with PrimeNG & Tailwind
-- ✅ Full CRUD operations
-- ✅ Responsive design
+- Real-time company & employee management
+- Instant updates across browser tabs
+- Modern UI with PrimeNG & Tailwind
+- Full CRUD operations
+- Responsive design
 
 ## Troubleshooting
 
@@ -97,4 +97,4 @@ For issues, check:
 
 ---
 
-**Happy Managing!** 🏢👥
+**Happy Managing!**
